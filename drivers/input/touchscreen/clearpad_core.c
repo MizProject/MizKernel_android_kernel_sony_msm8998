@@ -4161,7 +4161,7 @@ retry_reset:
 	if ((rc == -EAGAIN || rc == -EBUSY) &&
 	    reset->retry++ < SYN_RETRY_NUM_OF_RESET) {
 		LOGI(this, "schedule reset for retry (rc=%d)\n", rc);
-		schedule_delayed_work(&reset->work, 1 * HZ);
+		schedule_delayed_work(&reset->work, msecs_to_jiffies(1000));
 	} else if (rc) {
 		LOGE(this, "failed to execute %s '%s'\n",
 		     NAME_OF(clearpad_reset_name, reset->mode),
@@ -5632,7 +5632,7 @@ enable:
 				this->irq,
 				clearpad_hard_handler,
 				clearpad_threaded_handler,
-				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+				IRQF_TRIGGER_FALLING | IRQF_ONESHOT | IRQF_PERF_CRITICAL,
 				this->pdev->dev.driver->name, this);
 	if (rc)
 		LOGE(this, "irq %d busy? <%d>\n", this->irq, rc);
@@ -5642,7 +5642,7 @@ enable:
 					this->noise_det.irq,
 					clearpad_noise_det_hard_handler,
 					clearpad_noise_det_threaded_handler,
-					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+					IRQF_TRIGGER_RISING | IRQF_ONESHOT | IRQF_PERF_CRITICAL,
 					"clearpad_noise_det", this);
 		if (rc)
 			LOGE(this, "noise_det irq %d busy? <%d>\n",
@@ -9291,7 +9291,7 @@ static int clearpad_probe(struct platform_device *pdev)
 				this->irq,
 				clearpad_hard_handler,
 				clearpad_threaded_handler,
-				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+				IRQF_TRIGGER_FALLING | IRQF_ONESHOT | IRQF_PERF_CRITICAL,
 				this->pdev->dev.driver->name, this);
 	if (rc) {
 		HWLOGE(this, "failed to request threaded irq %d (rc=%d)\n",
@@ -9306,7 +9306,7 @@ static int clearpad_probe(struct platform_device *pdev)
 					this->noise_det.irq,
 					clearpad_noise_det_hard_handler,
 					clearpad_noise_det_threaded_handler,
-					IRQF_TRIGGER_RISING | IRQF_ONESHOT,
+					IRQF_TRIGGER_RISING | IRQF_ONESHOT | IRQF_PERF_CRITICAL,
 					"clearpad_noise_det", this);
 		if (rc) {
 			HWLOGE(this, "failed to request threaded irq %d"
@@ -9487,7 +9487,7 @@ err_in_ctrl_session_begin:
 		if (this->post_probe.retry <= SYN_RETRY_NUM_OF_POST_PROBE) {
 			HWLOGI(this, "reschedule post probe (%d)\n",
 			       this->post_probe.retry);
-			schedule_delayed_work(&this->post_probe.work, 3 * HZ);
+			schedule_delayed_work(&this->post_probe.work, msecs_to_jiffies(3000));
 		} else {
 			this->post_probe.retry = 0;
 			HWLOGE(this, "stop post probe\n");

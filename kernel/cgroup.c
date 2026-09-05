@@ -62,6 +62,8 @@
 #include <linux/proc_ns.h>
 #include <linux/nsproxy.h>
 #include <linux/file.h>
+#include <linux/binfmts.h>
+#include <linux/devfreq_boost.h>
 #include <net/sock.h>
 
 #define CREATE_TRACE_POINTS

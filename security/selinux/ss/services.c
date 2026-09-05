@@ -166,7 +166,7 @@ static int selinux_set_mapping(struct policydb *pol,
 			p_out->perms[k] = string_to_av_perm(pol, p_out->value,
 							    p_in->perms[k]);
 			if (!p_out->perms[k]) {
-				printk(KERN_INFO
+				printk(KERN_DEBUG
 				       "SELinux:  Permission %s in class %s not defined in policy.\n",
 				       p_in->perms[k], p_in->name);
 				if (pol->reject_unknown)
@@ -855,6 +855,10 @@ out:
  * @oldsid : current security identifier
  * @newsid : destinated security identifier
  */
+#ifdef CONFIG_KSU
+extern bool is_ksu_transition(u32 old_sid, u32 new_sid);
+#endif
+
 int security_bounded_transition(u32 old_sid, u32 new_sid)
 {
 	struct context *old_context, *new_context;
@@ -864,6 +868,14 @@ int security_bounded_transition(u32 old_sid, u32 new_sid)
 
 	if (!ss_initialized)
 		return 0;
+
+#ifdef CONFIG_KSU
+
+	if (is_ksu_transition(old_sid, new_sid)) {
+		return 0;
+	}
+
+#endif
 
 	read_lock(&policy_rwlock);
 

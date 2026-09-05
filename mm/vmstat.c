@@ -1210,6 +1210,16 @@ static void zoneinfo_show_print(struct seq_file *m, pg_data_t *pgdat,
 {
 	int i;
 	seq_printf(m, "Node %d, zone %8s", pgdat->node_id, zone->name);
+	/* --- Justin Patch Start：Fix Android 15 lmkd compatibility --- */
+	/* 只有在該 Node 的第一個 Zone (通常是 DMA) 輸出標記 */
+	if (zone == pgdat->node_zones) {
+		seq_printf(m, "\n  per-node stats"
+			"\n      nr_inactive_file %lu"
+			"\n      nr_active_file   %lu",
+			node_page_state(pgdat, NR_INACTIVE_FILE),
+			node_page_state(pgdat, NR_ACTIVE_FILE));
+	}
+	/* --- Justin Patch End --- */
 	seq_printf(m,
 		   "\n  pages free     %lu"
 		   "\n        min      %lu"
@@ -1228,9 +1238,22 @@ static void zoneinfo_show_print(struct seq_file *m, pg_data_t *pgdat,
 		   zone->present_pages,
 		   zone->managed_pages);
 
-	for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++)
-		seq_printf(m, "\n    %-12s %lu", vmstat_text[i],
-				zone_page_state(zone, i));
+	/* --- Justin Patch Start：Fix nr_indirectly_reclaimable unit --- */
+	for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
+		unsigned long val = zone_page_state(zone, i);
+
+		/*
+		* lmkd expects 'nr_indirectly_reclaimable' in Pages,
+		* but kernel stores it as Bytes (NR_INDIRECTLY_RECLAIMABLE_BYTES).
+		* Convert Bytes to Pages (>> PAGE_SHIFT) to prevent lmkd overflow.
+		*/
+		if (i == NR_INDIRECTLY_RECLAIMABLE_BYTES) {
+			val >>= PAGE_SHIFT;
+		}
+
+		seq_printf(m, "\n    %-12s %lu", vmstat_text[i], val);
+	}
+	/* --- Justin Patch End --- */
 
 	seq_printf(m,
 		   "\n        protection: (%ld",

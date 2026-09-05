@@ -116,7 +116,6 @@ struct kgsl_regulator {
  * @active_pwrlevel - The currently active power level
  * @previous_pwrlevel - The power level before transition
  * @thermal_pwrlevel - maximum powerlevel constraint from thermal
- * @default_pwrlevel - device wake up power level
  * @max_pwrlevel - maximum allowable powerlevel per the user
  * @min_pwrlevel - minimum allowable powerlevel per the user
  * @num_pwrlevels - number of available power levels
@@ -132,7 +131,6 @@ struct kgsl_regulator {
  * @pm_qos_req_dma - the power management quality of service structure
  * @pm_qos_active_latency - allowed CPU latency in microseconds when active
  * @pm_qos_cpu_mask_latency - allowed CPU mask latency in microseconds
- * @input_disable - To disable GPU wakeup on touch input event
  * @pm_qos_wakeup_latency - allowed CPU latency in microseconds during wakeup
  * @bus_control - true if the bus calculation is independent
  * @bus_mod - modifier from the current power level for the bus vote
@@ -171,7 +169,6 @@ struct kgsl_pwrctrl {
 	unsigned int active_pwrlevel;
 	unsigned int previous_pwrlevel;
 	unsigned int thermal_pwrlevel;
-	unsigned int default_pwrlevel;
 	unsigned int wakeup_maxpwrlevel;
 	unsigned int max_pwrlevel;
 	unsigned int min_pwrlevel;
@@ -189,7 +186,6 @@ struct kgsl_pwrctrl {
 	unsigned int pm_qos_active_latency;
 	unsigned int pm_qos_cpu_mask_latency;
 	unsigned int pm_qos_wakeup_latency;
-	bool input_disable;
 	bool bus_control;
 	int bus_mod;
 	unsigned int bus_percent_ab;
