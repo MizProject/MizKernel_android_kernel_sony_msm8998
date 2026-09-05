@@ -650,12 +650,28 @@ static int sync_fill_pt_info(struct fence *fence, void *data, int size)
 		sizeof(info->obj_name));
 	strlcpy(info->driver_name, fence->ops->get_driver_name(fence),
 		sizeof(info->driver_name));
-	if (fence_is_signaled(fence))
+	
+	/* --- Justin Patch Start: Fix missing timestamp for Android 15 --- */
+	if (fence_is_signaled(fence)) {
 		info->status = fence->status >= 0 ? 1 : fence->status;
-	else
-		info->status = 0;
-	info->timestamp_ns = ktime_to_ns(fence->timestamp);
 
+		/*
+		 * 如果底層 GPU 驅動忘了寫入 timestamp (拿到 0)，
+		 * 為了滿足 Android 15 SurfaceFlinger 的嚴格檢查，
+		 * 我們強行塞入當前的系統時間。
+		 */
+		if (ktime_to_ns(fence->timestamp) == 0) {
+			info->timestamp_ns = ktime_to_ns(ktime_get());
+		} else {
+			info->timestamp_ns = ktime_to_ns(fence->timestamp);
+		}
+	} else {
+		info->status = 0;
+		/* 還沒 signaled 的 fence 必須嚴格回傳 0 */
+		info->timestamp_ns = 0;
+	}
+	/* --- Justin Patch End --- */
+	
 	return info->len;
 }
 

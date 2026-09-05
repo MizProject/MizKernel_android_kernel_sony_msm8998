@@ -66,7 +66,7 @@
 #define CREATE_TRACE_POINTS
 #include "trace/lowmemorykiller.h"
 
-static uint32_t lowmem_debug_level = 1;
+static uint32_t lowmem_debug_level = 0;
 static short lowmem_adj[6] = {
 	0,
 	1,
@@ -342,7 +342,7 @@ static struct notifier_block lmk_vmpr_nb = {
 	.notifier_call = lmk_vmpressure_notifier,
 };
 
-static int test_task_flag(struct task_struct *p, int flag)
+static inline int test_task_flag(struct task_struct *p, int flag)
 {
 	struct task_struct *t;
 

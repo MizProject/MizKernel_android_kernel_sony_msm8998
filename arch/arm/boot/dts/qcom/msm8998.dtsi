@@ -39,7 +39,7 @@
 
 	chosen {
 		stdout-path = "serial0";
-		bootargs = "rcupdate.rcu_expedited=1";
+		bootargs = "noirqdebug rcupdate.rcu_expedited=1";
 	};
 
 	cpus {
@@ -287,9 +287,6 @@
 		energy-costs {
 			CPU_COST_0: core-cost0 {
 				busy-cost-data = <
-					65  11
-					80  20
-					96  25
 					113 30
 					130 33
 					147 35
@@ -316,13 +313,6 @@
 			};
 			CPU_COST_1: core-cost1 {
 				busy-cost-data = <
-					129  56
-					148  76
-					182  91
-					216  105
-					247  118
-					278  135
-					312  150
 					344  162
 					391  181
 					419  196
@@ -354,9 +344,6 @@
 			};
 			CLUSTER_COST_0: cluster-cost0 {
 				busy-cost-data = <
-					65  17
-					80  18
-					96  18
 					113 20
 					130 21
 					147 22
@@ -383,13 +370,6 @@
 			};
 			CLUSTER_COST_1: cluster-cost1 {
 				busy-cost-data = <
-					129  24
-					148  25
-					182  26
-					216  29
-					247  30
-					278  33
-					312  35
 					344  37
 					391  38
 					419  40
@@ -748,7 +728,8 @@
 			<  7759 /* 1017 MHz */ >,
 			<  9887 /* 1296 MHz */ >,
 			< 11863 /* 1555 MHz */ >,
-			< 13763 /* 1804 MHz */ >;
+			< 13763 /* 1804 MHz */ >,
+			< 15960 /* 2092 MHz */ >;
 	};
 
 	bwmon: qcom,cpu-bwmon {
@@ -777,7 +758,8 @@
 			<  7759 /* 1017 MHz */ >,
 			<  9887 /* 1296 MHz */ >,
 			< 11863 /* 1555 MHz */ >,
-			< 13763 /* 1804 MHz */ >;
+			< 13763 /* 1804 MHz */ >,
+			< 15960 /* 2092 MHz */ >;
 	};
 
 	memlat_cpu0: qcom,memlat-cpu0 {
@@ -797,7 +779,8 @@
 			<  7759 /* 1017 MHz */ >,
 			<  9887 /* 1296 MHz */ >,
 			< 11863 /* 1555 MHz */ >,
-			< 13763 /* 1804 MHz */ >;
+			< 13763 /* 1804 MHz */ >,
+			< 15960 /* 2092 MHz */ >;
 	};
 
 	memlat_cpu4: qcom,memlat-cpu4 {
@@ -818,7 +801,8 @@
 			<  7759 /* 1017 MHz */ >,
 			<  9887 /* 1296 MHz */ >,
 			< 11863 /* 1555 MHz */ >,
-			< 13763 /* 1804 MHz */ >;
+			< 13763 /* 1804 MHz */ >,
+			< 15960 /* 2092 MHz */ >;
 	};
 
 	devfreq_memlat_0: qcom,arm-memlat-mon-0 {
@@ -3216,7 +3200,7 @@
 		reg = <0x780000 0x1000>;
 		qcom,low-hyst-temp = <100>;
 		qcom,high-hyst-temp = <100>;
-		qcom,polling-interval = <50>;
+		qcom,polling-interval = <100>;
 
 		ea0: ea0 {
 			sensor = <&sensor_information1>;
