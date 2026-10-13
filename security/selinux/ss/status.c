@@ -34,9 +34,12 @@
  * avc, if needed.
  * In most cases, application shall confirm the kernel status is not
  * changed without any system call invocations.
+ *
+ * Mizumo-prjkt:
+ * However in this modifications onto this kernel, remove static for bakasu
  */
-static struct page *selinux_status_page;
-static DEFINE_MUTEX(selinux_status_lock);
+struct page *selinux_status_page;
+DEFINE_MUTEX(selinux_status_lock);
 
 /*
  * selinux_kernel_status_page
