@@ -55,22 +55,20 @@ if args.extra_help:
 
 def grab_clang():
     print("Grabbing Clang r547379")
-    subprocess.run(["curl", "-L", "-o", tarball, url])
+    dl = subprocess.run(["curl", "-L", "-o", tarball, url])
     print("Confirming Clang r547379 is downloaded")
-    if os.path.exists(clang_dir):
-        print("Clang r547379 is downloaded")
-    else:
-        print("Clang r547379 is not downloaded, something went wrong, please read the terminal for clues.")
-        quit()
+    if dl.returncode != 0 or not os.path.exists(tarball):
+        print("Error: Clang r547379 failed to download.")
+        sys.exit(1)
     print("Extracting clang-r547379 to toolchains/clang-r547379")
     print("First, check if toolchains/clang-r547379 exists, if it does, delete it and re-extract")
     if os.path.exists(clang_dir):
         print("toolchains/clang-r547379 exists, deleting it")
         subprocess.run(["rm", "-rf", clang_dir])
-        subprocess.run(["mkdir", "-p", clang_dir])
+        os.makedirs(clang_dir)
     else:
         print("toolchains/clang-r547379 does not exist, creating it")
-        subprocess.run(["mkdir", "-p", clang_dir])
+        os.makedirs(clang_dir)
     print("Extracting clang-r547379 to toolchains/clang-r547379")
     subprocess.run(["tar", "-xf", tarball, "-C", clang_dir, "--strip-components=1"])
     print("Clang r547379 extracted to toolchains/clang-r547379")

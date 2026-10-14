@@ -128,3 +128,11 @@ Android.bp
 # Python specific junks
 *.pyc
 *.pyd
+
+# Downloaded stuffs
+toolchains/
+clang-r547379.tar.xz
+toolchains/clang-r547379
+
+# Ignoring build artifacts
+out/
