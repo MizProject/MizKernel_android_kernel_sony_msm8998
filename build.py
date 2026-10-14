@@ -100,6 +100,7 @@ def download_dependencies():
     grab_clang()
     modernized_gnu_assemblers_dl()
     print("Dependencies downloaded successfully")
+    quit()
 
 def setup_build_env():
     os.environ["ARCH"] = "arm64"
