@@ -2,6 +2,3 @@
 	path = KernelSU-Next
 	url = git@github.com:justinlin099/KernelSU-Next.git
 	branch = legacy
-[submodule "BakaSU"]
-	path = BakaSU
-	url = https://github.com/Baka-SU/BakaSU
