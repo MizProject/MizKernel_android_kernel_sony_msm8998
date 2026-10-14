@@ -102,7 +102,7 @@ def setup_build_env():
     os.environ["SUBARCH"] = "arm64"
     os.environ["PATH"] = os.path.join(os.getcwd(), clang_dir, "bin") + ":" + os.environ["PATH"]
 
-    
+
 
 
 if args.download_deps:
@@ -146,4 +146,4 @@ if args.build:
         subprocess.run(["make"] + COMMON_MAKE_FLAGS + ["menuconfig"], check=True)
 
     print(f"Building kernel for {args.build} with {cores} in system.")
-    subprocess.run(["make", f"-j{cores}" + COMMON_MAKE_FLAGS], check=True)
+    subprocess.run(["make", f"-j{cores}"] + COMMON_MAKE_FLAGS, check=True)
