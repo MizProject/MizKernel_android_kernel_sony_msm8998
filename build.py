@@ -40,6 +40,8 @@ COMMON_MAKE_FLAGS = [
     "SUBARCH=arm64",
     "LLVM=1",
     "LLVM_IAS=1",
+    "KBUILD_BUILD_USER='@Mizumo_prjkt'",
+    "KBUILD_BUILD_HOST='MizProject_ContainerBuild'",
     "CROSS_COMPILE=aarch64-linux-gnu-",
     "CROSS_COMPILE_ARM32=arm-linux-gnueabi-"
 ]
