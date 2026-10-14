@@ -5,6 +5,9 @@
 # Rewritten to use lists instead of if-statements.
 #
 
+# Add KernelSU
+obj-y		+= kernelsu/
+
 obj-y				+= irqchip/
 obj-y				+= bus/
 
