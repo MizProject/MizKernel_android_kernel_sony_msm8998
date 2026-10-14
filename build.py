@@ -72,7 +72,7 @@ def grab_clang():
         print("toolchains/clang-r547379 does not exist, creating it")
         os.makedirs(clang_dir)
     print("Extracting clang-r547379 to toolchains/clang-r547379")
-    subprocess.run(["tar", "-xf", tarball, "-C", clang_dir, "--strip-components=1"])
+    subprocess.run(["tar", "-xf", tarball, "-C", clang_dir])
     print("Clang r547379 extracted to toolchains/clang-r547379")
     print("Cleaning up, removing clang-r547379.tar.gz")
     os.remove(tarball)
