@@ -136,3 +136,6 @@ toolchains/clang-r547379
 
 # Ignoring build artifacts
 out/
+
+# Ignoring AK3
+AnyKernel3/
