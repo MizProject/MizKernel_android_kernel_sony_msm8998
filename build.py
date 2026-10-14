@@ -78,7 +78,7 @@ def grab_clang():
 def package_manager_dl():
     print("Downloading dependencies needed for the build")
     subprocess.run(["sudo", "apt-get", "update"])
-    p1 = subprocess.run(["sudo", "apt-get", "install", "-y", "build-essential", "bc", "bison", "flex", "libssl-dev", "libcurses6","libelf-dev", "libncurses6", "libncurses-dev", "x11proto-core-dev", "zip", "unzip", "aria2", "python3", "python-is-python3", "cpio", "kmod", "rsync", "pahole", "fontconfig", "bc", "xsltproc", "libxml2-utils", "zlib1g-dev", "libc6-dev-i386"])
+    p1 = subprocess.run(["sudo", "apt-get", "install", "-y", "build-essential", "bc", "bison", "flex", "libssl-dev", "libncurses6","libelf-dev", "libncurses6", "libncurses-dev", "x11proto-core-dev", "zip", "unzip", "aria2", "python3", "python-is-python3", "cpio", "kmod", "rsync", "pahole", "fontconfig", "bc", "xsltproc", "libxml2-utils", "zlib1g-dev", "libc6-dev-i386"])
     if p1.returncode != 0:
         print("Error: Failed to install dependencies. Please check your internet connection and try again.")
         quit()
