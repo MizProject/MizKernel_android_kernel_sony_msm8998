@@ -439,7 +439,7 @@ void input_event(struct input_dev *dev,
 	unsigned long flags;
 
 	#ifdef CONFIG_KSU_MANUAL_HOOK
-		if (static_branch_unlikely(&ksu_is_input_hook_enabled))
+		if (unlikely(ksu_input_hook))
 			ksu_handle_input_handle_event(&type, &code, &value);
 	#endif
 
