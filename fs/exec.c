@@ -1564,9 +1564,6 @@ static int do_execveat_common(int fd, struct filename *filename,
 		<EOM>
 	*/
 
-	#ifdef CONFIG_KSU_MANUAL_HOOK
-		ksu_handle_execve((int *)AT_FDCWD, filename, &argv, &envp, 0);
-	#endif
 
 	if (IS_ERR(filename))
 		return PTR_ERR(filename);
