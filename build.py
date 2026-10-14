@@ -97,6 +97,13 @@ def download_dependencies():
     modernized_gnu_assemblers_dl()
     print("Dependencies downloaded successfully")
 
+def setup_build_env():
+    os.environ["ARCH"] = "arm64"
+    os.environ["SUBARCH"] = "arm64"
+    os.environ["PATH"] = os.path.join(os.getcwd(), clang_dir, "bin") + ":" + os.environ["PATH"]
+
+    
+
 
 if args.download_deps:
     download_dependencies()
@@ -105,11 +112,6 @@ if args.menuconf:
     setup_build_env()
     print("Running menuconfig for kernel")
     subprocess.run(["make", "menuconfig"])
-
-def setup_build_env():
-    os.environ["ARCH"] = "arm64"
-    os.environ["SUBARCH"] = "arm64"
-    os.environ["PATH"] = os.path.join(os.getcwd(), clang_dir, "bin") + ":" + os.environ["PATH"]
 
 if args.extra_help:
     extra_help()
