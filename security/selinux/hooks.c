@@ -2304,13 +2304,14 @@ static int check_nnp_nosuid(const struct linux_binprm *bprm,
     }
 #endif
 
-#ifdef CONFIG_KSU
+// This hook is abandoned
+// #ifdef CONFIG_KSU
 
-	if (is_ksu_transition(old_tsec->sid, new_tsec->sid)) {
-		return 0;
+// 	if (is_ksu_transition(old_tsec->sid, new_tsec->sid)) {
+// 		return 0;
 
-	}
-#endif
+// 	}
+// #endif
 
 	/*
 	 * The only transitions we permit under NNP or nosuid
