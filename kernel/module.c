@@ -3172,6 +3172,13 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
 	if (IS_ERR(mod))
 		return mod;
 
+	// Patch by Mizumo-prjkt to circumvent complicated NFC configuration by every ROM
+	// Contact me if you have a problem
+	if (info->name && (!strcmp(info->name, "sony_carillon_nfc") || !strcmp(info->name, "pn553"))) {
+		pr_info("module: %s is already built-in, skipping check_modinfo\n", info->name);
+		return ERR_PTR(-EALREADY);
+	}
+
 	err = check_modinfo(mod, info, flags);
 	if (err)
 		return ERR_PTR(err);
@@ -3512,6 +3519,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
 	mod = layout_and_allocate(info, flags);
 	if (IS_ERR(mod)) {
 		err = PTR_ERR(mod);
+		if (err == -EALREADY)
+			err = 0;
 		goto free_copy;
 	}
 
