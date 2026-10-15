@@ -38,6 +38,7 @@ COMMON_MAKE_FLAGS = [
     "O=out",
     "ARCH=arm64",
     "SUBARCH=arm64",
+    "CC= ccache clang",
     "LLVM=1",
     "LLVM_IAS=1",
     "KBUILD_BUILD_USER='@Mizumo_prjkt'",
@@ -80,7 +81,7 @@ def grab_clang():
 def package_manager_dl():
     print("Downloading dependencies needed for the build")
     subprocess.run(["sudo", "apt-get", "update"])
-    p1 = subprocess.run(["sudo", "apt-get", "install", "-y", "build-essential", "bc", "bison", "flex", "libssl-dev", "libncurses6","libelf-dev", "libncurses6", "libncurses-dev", "x11proto-core-dev", "zip", "unzip", "aria2", "python3", "python-is-python3", "cpio", "kmod", "rsync", "pahole", "fontconfig", "bc", "xsltproc", "libxml2-utils", "zlib1g-dev", "libc6-dev-i386"])
+    p1 = subprocess.run(["sudo", "apt-get", "install", "-y", "build-essential", "bc", "bison", "flex", "libssl-dev", "ccache", "libncurses6","libelf-dev", "libncurses6", "libncurses-dev", "x11proto-core-dev", "zip", "unzip", "aria2", "python3", "python-is-python3", "cpio", "kmod", "rsync", "pahole", "fontconfig", "bc", "xsltproc", "libxml2-utils", "zlib1g-dev", "libc6-dev-i386"])
     if p1.returncode != 0:
         print("Error: Failed to install dependencies. Please check your internet connection and try again.")
         quit()
@@ -137,7 +138,13 @@ def check_tools():
         quit()
     print("All required tools are present.")
 
+def prep_ccache():
+    print("Preparing ccache...")
+    subprocess.run(["ccache", "-M", "10G"])
+    print("ccache prepared with 10G max size.")
+
 if args.build:
+    prep_ccache()
     setup_build_env()
     check_tools()
     defconfig_target = f"lineage-msm8998-yoshino-{args.build.replace('-', '_')}_defconfig"
