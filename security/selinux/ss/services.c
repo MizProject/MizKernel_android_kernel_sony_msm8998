@@ -77,7 +77,7 @@ int selinux_policycap_openperm;
 int selinux_policycap_alwaysnetwork;
 
 
-// Disable static for bakasu
+// Disable static for KernelSU
 DEFINE_RWLOCK(policy_rwlock);
 
 static struct sidtab sidtab;

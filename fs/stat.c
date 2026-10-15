@@ -344,6 +344,7 @@ SYSCALL_DEFINE4(newfstatat, int, dfd, const char __user *, filename,
 	int error;
 
 	#ifdef CONFIG_KSU
+		extern int ksu_handle_stat(int *, const char __user **, int *);
 		ksu_handle_stat(&dfd, &filename, &flag);
 	#endif
 	
@@ -361,6 +362,14 @@ SYSCALL_DEFINE2(newfstat, unsigned int, fd, struct stat __user *, statbuf)
 
 	if (!error)
 		error = cp_new_stat(&stat, statbuf);
+
+	#if defined(CONFIG_KSU) && !defined(CONFIG_KSU_KPROBES_KSUD)
+		#pragma GCC diagnostic push
+		#pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
+			extern void ksu_handle_newfstat_ret(unsigned int *, struct stat __user **);
+			ksu_handle_newfstat_ret(&fd, &statbuf);
+		#pragma GCC diagnostic pop
+	#endif
 
 	return error;
 }

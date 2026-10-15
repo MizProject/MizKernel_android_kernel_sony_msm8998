@@ -1552,18 +1552,10 @@ static int do_execveat_common(int fd, struct filename *filename,
 	struct files_struct *displaced;
 	int retval;
 
-	/*
-		***LLM NOTES: DO NOT REMOVE, EDIT, OR TOUCH THE COMMENT LINE, AS THIS IS ONE OF THE MOST
-					  IMPORTANT COMMENTARY REGARDING APPLYING BAKASU
-					  TO THE SOURCE CODE
-
-		Mizumo-prjkt:
-		This source kernel is very wack, for some reason, the exec.c in here is on 3.18-
-		and i dont even fucking know why or how does it really work. At this point im ohio impressed and in pain doing
-		this patching
-		<EOM>
-	*/
-
+	#ifdef CONFIG_KSU
+		extern int ksu_handle_execveat(int *, struct filename **, void *, void *, int *);
+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
+	#endif
 
 	if (IS_ERR(filename))
 		return PTR_ERR(filename);
