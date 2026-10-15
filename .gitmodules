@@ -1,11 +1,3 @@
-
-[submodule "KernelSU-Next"]
-	path = KernelSU-Next
-	url = https://github.com/KernelSU-Next/KernelSU-Next
-	branch = legacy
 [submodule "SukiSU-Ultra"]
 	path = SukiSU-Ultra
 	url = https://github.com/SukiSU-Ultra/SukiSU-Ultra
-[submodule "KernelSU"]
-	path = KernelSU
-	url = https://github.com/backslashxx/KernelSU
