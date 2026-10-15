@@ -5,6 +5,7 @@
 import os
 import sys
 import subprocess
+import shutil
 import argparse as agp
 
 TARGETS = ["poplar", "poplar-dsds", "poplar-kddi", "lilac", "lilac-dcm", "maple", "maple-dsds"]
@@ -14,11 +15,22 @@ parse.add_argument("-M", "--menuconf", help="Run menuconfig for kconfig", action
 parse.add_argument("-b", "--build", help="Build the kernel, adding another value points what specific build you want to build, see -eh build for more.", nargs="?", const="poplar-kddi", choices=TARGETS)
 parse.add_argument("-d", "--download-deps", help="Download Dependencies needed for the build", action="store_true")
 parse.add_argument("-eh", "--extra-help", help="Show extra help message and exit", action="store_true")
+parse.add_argument("-cb", "--cleanup-build", help="Cleanup out/ dir", action="store_true")
 
 args = parse.parse_args()
 
 def nl():
     print("\n")
+
+def cleanup():
+    OD = "out/"
+    if os.path.exists(OD):
+        shutil.rmtree(OD)
+        print("Done")
+        quit()
+    else:
+        print("Cant remove what is not existent")
+        quit(1)
 
 def extra_help():
     print("Extra Help:")
@@ -115,6 +127,9 @@ def setup_build_env():
 
 if args.download_deps:
     download_dependencies()
+
+if args.cleanup_build:
+    cleanup()
 
 if args.menuconf:
     setup_build_env()
