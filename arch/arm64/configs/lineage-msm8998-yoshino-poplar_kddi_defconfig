@@ -1415,7 +1415,7 @@ CONFIG_MMTUNER_MN8855x=y
 #
 # Sony Carillon NFC driver
 #
-CONFIG_NFC_CARILLON=m
+CONFIG_NFC_CARILLON=y
 
 #
 # SCSI device support
