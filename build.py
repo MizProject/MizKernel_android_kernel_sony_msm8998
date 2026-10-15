@@ -57,6 +57,10 @@ if args.extra_help:
 
 
 def grab_clang():
+    print("Check if we have clang r547379 already")
+    if os.path.exists(clang_dir):
+        print("It already existed... Exiting download")
+        return
     print("Grabbing Clang r547379")
     dl = subprocess.run(["curl", "-L", "-o", tarball, url])
     print("Confirming Clang r547379 is downloaded")
@@ -81,7 +85,7 @@ def grab_clang():
 def package_manager_dl():
     print("Downloading dependencies needed for the build")
     subprocess.run(["sudo", "apt-get", "update"])
-    p1 = subprocess.run(["sudo", "apt-get", "install", "-y", "build-essential", "bc", "bison", "flex", "libssl-dev", "ccache", "libncurses6","libelf-dev", "libncurses6", "libncurses-dev", "x11proto-core-dev", "zip", "unzip", "aria2", "python3", "python-is-python3", "cpio", "kmod", "rsync", "pahole", "fontconfig", "bc", "xsltproc", "libxml2-utils", "zlib1g-dev", "libc6-dev-i386"])
+    p1 = subprocess.run(["sudo", "apt-get", "install", "-y", "build-essential", "bc", "bison", "flex", "libssl-dev", "libncurses6","libelf-dev", "libncurses6", "libncurses-dev", "x11proto-core-dev", "zip", "unzip", "aria2", "python3", "python-is-python3", "cpio", "kmod", "rsync", "pahole", "fontconfig", "bc", "xsltproc", "libxml2-utils", "zlib1g-dev", "libc6-dev-i386"])
     if p1.returncode != 0:
         print("Error: Failed to install dependencies. Please check your internet connection and try again.")
         quit()
@@ -107,8 +111,6 @@ def setup_build_env():
     os.environ["ARCH"] = "arm64"
     os.environ["SUBARCH"] = "arm64"
     os.environ["PATH"] = os.path.join(os.getcwd(), clang_dir, "bin") + ":" + os.environ["PATH"]
-
-
 
 
 if args.download_deps:
@@ -138,29 +140,8 @@ def check_tools():
         quit()
     print("All required tools are present.")
 
-def prep_ccache():
-    print("Preparing ccache...")
-    s = subprocess.run(["ccache", "-M", "10G"])
-    if s.returncode != 0:
-        print("Error: Failed to set ccache max size. Please check your ccache installation and try again.")
-        quit()
-    print("ccache prepared with 10G max size.")
-
-def check_ccache():
-    print("Checking ccache stats...")
-    s = subprocess.run(["ccache", "-s"])
-    if s.returncode != 0:
-        print("Error: Failed to check ccache stats. Please check your ccache installation and try again.")
-        quit()
-    locate = subprocess.run(["which", "ccache"], stdout=subprocess.PIPE, text=True)
-    if locate.returncode != 0 or not locate.stdout.strip():
-        print("Error: ccache is not found in PATH. Please ensure ccache is installed and available in your PATH.")
-        quit()
-    print("ccache stats checked.")
 
 if args.build:
-    prep_ccache()
-    check_ccache()
     setup_build_env()
     check_tools()
     defconfig_target = f"lineage-msm8998-yoshino-{args.build.replace('-', '_')}_defconfig"
@@ -175,3 +156,5 @@ if args.build:
 
     print(f"Building kernel for {args.build} with {cores} in system.")
     subprocess.run(["make", f"-j{cores}"] + COMMON_MAKE_FLAGS, check=True)
+
+    
