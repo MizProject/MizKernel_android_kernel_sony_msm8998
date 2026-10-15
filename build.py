@@ -140,11 +140,27 @@ def check_tools():
 
 def prep_ccache():
     print("Preparing ccache...")
-    subprocess.run(["ccache", "-M", "10G"])
+    s = subprocess.run(["ccache", "-M", "10G"])
+    if s.returncode != 0:
+        print("Error: Failed to set ccache max size. Please check your ccache installation and try again.")
+        quit()
     print("ccache prepared with 10G max size.")
+
+def check_ccache():
+    print("Checking ccache stats...")
+    s = subprocess.run(["ccache", "-s"])
+    if s.returncode != 0:
+        print("Error: Failed to check ccache stats. Please check your ccache installation and try again.")
+        quit()
+    locate = subprocess.run(["which", "ccache"], stdout=subprocess.PIPE, text=True)
+    if locate.returncode != 0 or not locate.stdout.strip():
+        print("Error: ccache is not found in PATH. Please ensure ccache is installed and available in your PATH.")
+        quit()
+    print("ccache stats checked.")
 
 if args.build:
     prep_ccache()
+    check_ccache()
     setup_build_env()
     check_tools()
     defconfig_target = f"lineage-msm8998-yoshino-{args.build.replace('-', '_')}_defconfig"
